@@ -19,7 +19,8 @@ class Event(models.Model):
         ordering = ['date_time']
 
     def clean(self):
-        # Validate that the date_time is in the future
+        if self.date_time is None:
+            raise ValidationError("Date and Time are required")
         if self.date_time <= timezone.now():
             raise ValidationError("The date and time must be in the future")
 
