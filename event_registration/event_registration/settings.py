@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'events',
     'participants',
-    'user_crm',
+    'CRM',
+
 ]
 
 MIDDLEWARE = [
