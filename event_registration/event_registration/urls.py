@@ -8,8 +8,11 @@ urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('', include('events.urls')),
                   # path('', include('participants.urls')),
-                  path('', include('events.urls')),
+                  path('', include('CRM.urls')),
                   path('', RedirectView.as_view(url='events_list/')),
                   path('accounts/', include('django.contrib.auth.urls')),
 
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+        ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
