@@ -1,10 +1,12 @@
+from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
 from django.views import generic
 from django.utils import timezone
 from events.models import Participant, Event, EventRegistration
 from .forms import ParticipantForm
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 
 class ParticipantCreateView(CreateView):
@@ -12,19 +14,23 @@ class ParticipantCreateView(CreateView):
     form_class = ParticipantForm
     template_name = 'participants/register_participant.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        event_id = self.kwargs.get('event_id')
+        event = get_object_or_404(Event, id=event_id)
+        context['event'] = event
+        return context
+
     def form_valid(self, form):
-        event_id = self.request.POST.get('event', None)
+        event_id = self.kwargs.get('event_id')
+        event = get_object_or_404(Event, id=event_id)
 
-        try:
-            event = Event.objects.get(id=event_id)
-        except Event.DoesNotExist:
-            return HttpResponse("Event does not exist.")
+        if event.remaining_participants <= 0:
+            messages.error(self.request, "The event has reached its maximum number of participants.")
+            return self.form_invalid(form)
 
-        if event.participants.count() >= event.max_participants:
-            return HttpResponse("The event has reached its maximum number of participants.")
-
-        self.object = form.save()
-        EventRegistration.objects.create(event=event, participant=self.object)
+        participant = form.save()
+        EventRegistration.objects.create(event=event, participant=participant)
 
         return HttpResponseRedirect(self.get_success_url())
 
