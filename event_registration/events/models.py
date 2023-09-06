@@ -49,7 +49,7 @@ class Participant(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
 
     def __str__(self):
-        return self.first_name
+        return f"{self.first_name} {self.last_name}"
 
 
 class EventRegistration(models.Model):
@@ -61,4 +61,7 @@ class EventRegistration(models.Model):
         if self.event.remaining_participants <= 0:
             raise ValidationError("The event has reached its maximum number of participants")
         super(EventRegistration, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.event} - {self.participant}"
 
