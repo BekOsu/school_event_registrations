@@ -78,4 +78,10 @@ class EventListView(ListView):
     model = Event
     template_name = 'events/event_list.html'
     context_object_name = 'events'
-    ordering = ['-date_time']
+    ordering = ['date_time']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        for event in context['events']:
+            event.remaining = event.remaining_participants  # You can now access this in your template
+        return context
