@@ -8,7 +8,7 @@ import datetime
 
 class Event(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    image = models.ImageField(upload_to='events/', default='events/default_image.jpg.png')
+    image = models.ImageField(upload_to='events/', default='default_image.png')
     date_time = models.DateTimeField()
     location = models.CharField(max_length=200)
     description = models.TextField(max_length=600)

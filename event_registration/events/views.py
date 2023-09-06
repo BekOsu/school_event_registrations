@@ -18,14 +18,14 @@ class CSVFormMixin:
     def handle_csv_form(self, form):
         csv_file = form.cleaned_data.get('csv_file')
 
-        imported_events = parse_csv(csv_file)
+        imported_events = parse_csv(csv_file, self.request)
 
         for event in imported_events:
             event.created_by = self.request.user
             event.save()
 
         if imported_events:
-            self.object = imported_events[-1]  # Explicitly set self.object to the last imported event
+            self.object = imported_events[-1]
 
         messages.success(self.request, 'Events imported successfully.')
 
@@ -33,7 +33,7 @@ class CSVFormMixin:
 class CombinedEventCreateAndCSVImportView(EventFormMixin, CSVFormMixin, CreateView, FormView):
     form_class = EventForm
     second_form_class = CSVUploadForm
-    template_name = 'events/event_or_import.html'
+    template_name = 'events/create_or_import_events.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

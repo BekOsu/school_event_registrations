@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'participants',
     'CRM',
 
+    'widget_tweaks',
+
 ]
 
 MIDDLEWARE = [
