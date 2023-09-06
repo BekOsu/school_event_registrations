@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>{{ event.name }}</h2>
+  <div class="container my-5">
+    <div class="card">
+     <div class="card" style="max-width: 400px;">
+    <img src="{{ event.image.url }}" class="card-img-top img-fluid" alt="{{ event.name }}" />
+      </div>
 
-  <ul>
-    <li>Date and Time: {{ event.date_time }}</li>
-    <li>Location: {{ event.location }}</li>
-    <li>Description: {{ event.description }}</li>
-    <li>Max Participants: {{ event.max_participants }}</li>
-    <li>Created By: {{ event.created_by }}</li>
-    <li>Created At: {{ event.created_at }}</li>
-  </ul>
-
-  <a href="{% url 'events_list' %}">Back to Events List</a>
+      <div class="card-header">
+        <h2>{{ event.name }}</h2>
+      </div>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>Date and Time:</strong> {{ event.date_time }}</li>
+          <li class="list-group-item"><strong>Location:</strong> {{ event.location }}</li>
+          <li class="list-group-item"><strong>Description:</strong> {{ event.description }}</li>
+          <li class="list-group-item"><strong>Max Participants:</strong> {{ event.max_participants }}</li>
+          <li class="list-group-item"><strong>Created By:</strong> {{ event.created_by }}</li>
+          <li class="list-group-item"><strong>Created At:</strong> {{ event.created_at }}</li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-3">
+      <a href="{% url 'events_list' %}" class="btn btn-primary">Back to Events List</a>
+    </div>
+  </div>
 {% endblock %}
