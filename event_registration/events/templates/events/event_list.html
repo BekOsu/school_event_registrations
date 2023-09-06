@@ -10,6 +10,7 @@
         <th>Location</th>
         <th>Description</th>
         <th>Max Participants</th>
+        <th>Remaining Participants</th>
         <th>Image</th>
         <th>Action</th>
     </tr>
@@ -22,9 +23,11 @@
         <td>{{ event.location }}</td>
         <td>{{ event.description }}</td>
         <td>{{ event.max_participants }}</td>
+        <td>{{ event.remaining_participants }}</td>
         <td>
             {% if event.image %}
-            <img alt="{{ event.name }}" class="img-fluid" src="{{ event.image.url }}" width="100">
+            <a href="{% url 'event_detail' event.id %}">
+                <img alt="{{ event.name }}" class="img-fluid" src="{{ event.image.url }}" width="100"></a>
             {% else %}
             No image
             {% endif %}
