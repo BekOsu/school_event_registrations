@@ -13,6 +13,7 @@ class Event(models.Model):
     location = models.CharField(max_length=200)
     description = models.TextField(max_length=600)
     max_participants = models.PositiveIntegerField(default=0)
+    participants = models.ManyToManyField('Participant', through='EventRegistration', related_name='events')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -32,5 +33,32 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('event_detail', args=[str(self.id)])
 
+    @property
+    def remaining_participants(self):
+        return self.max_participants - self.participants.count()
+
     def __str__(self):
         return self.name
+
+
+class Participant(models.Model):
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=20)
+    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+
+    def __str__(self):
+        return self.first_name
+
+
+class EventRegistration(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
+    registration_date = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if self.event.remaining_participants <= 0:
+            raise ValidationError("The event has reached its maximum number of participants")
+        super(EventRegistration, self).save(*args, **kwargs)
+
