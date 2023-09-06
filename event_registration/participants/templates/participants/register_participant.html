@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mt-5 mb-4">Register for Event: {{ event.name }}</h2>
+
+    <!-- Show Event Details -->
+    <div class="card mb-4">
+        <!-- Set image width to 200px -->
+        <img src="{{ event.image.url }}" class="card-img-top" alt="{{ event.name }}" style="max-width: 200px;">
+        <div class="card-body">
+            <h5 class="card-title">{{ event.name }}</h5>
+            <p class="card-text">{{ event.description }}</p>
+        </div>
+        <div class="card-footer text-muted">
+            {{ event.date_time|date:"SHORT_DATE_FORMAT" }} | {{ event.location }}
+        </div>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="mb-5">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.first_name.label_tag }} {{ form.first_name }}
+        </div>
+        <div class="form-group">
+            {{ form.last_name.label_tag }} {{ form.last_name }}
+        </div>
+        <div class="form-group">
+            {{ form.email.label_tag }} {{ form.email }}
+        </div>
+        <div class="form-group">
+            {{ form.phone_number.label_tag }} {{ form.phone_number }}
+        </div>
+        <div class="form-group">
+            {{ form.profile_picture.label_tag }} {{ form.profile_picture }}
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <!-- Back to Events List Button -->
+    <a href="{% url 'events_list' %}" class="btn btn-secondary">Back to Events List</a>
+</div>
+{% endblock %}
