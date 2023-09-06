@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+  <h1 class="mb-4">Create Event or Import Events from CSV</h1>
+
+  <!-- Single Event Creation Form -->
+  <form method="post" enctype="multipart/form-data" class="mb-4">
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header">
+        Create Single Event
+      </div>
+      <div class="card-body">
+        {% for field in form %}
+          <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field|add_class:"form-control" }}
+          </div>
+        {% endfor %}
+        <input type="hidden" name="event_form">
+        <button type="submit" class="btn btn-primary">Create Single Event</button>
+      </div>
+    </div>
+  </form>
+
+  <hr class="mb-4">
+
+  <!-- Bulk CSV Import Form -->
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header">
+        Import Bulk Events from CSV
+      </div>
+      <div class="card-body">
+        {% for field in csv_form %}
+          <div class="mb-3">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+            {{ field|add_class:"form-control" }}
+          </div>
+        {% endfor %}
+        <input type="hidden" name="csv_form">
+        <button type="submit" class="btn btn-secondary">Import Events from CSV</button>
+      </div>
+    </div>
+  </form>
+
+{% endblock %}
+
