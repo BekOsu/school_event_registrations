@@ -4,18 +4,18 @@
 
 <!-- Add a form for filtering -->
 <form method="get">
-    <label for="type">Filter by type:</label>
-    <select name="type" id="type">
+    <label for="event_type">Filter by type:</label>
+   <select name="event_type" id="event_type">
         <option value="">-- Select --</option>
         <!-- Add your event types here -->
-        <option value="Conference">Conference</option>
-        <option value="Seminar">Seminar</option>
-        <option value="Workshop">Workshop</option>
-        <option value="Webinar">Webinar</option>
+        <option value="conference">Conference</option>
+        <option value="seminar">Seminar</option>
+        <option value="workshop">Workshop</option>
+        <option value="webinar">Webinar</option>
     </select>
 
-    <label for="date">Filter by date:</label>
-    <input type="date" name="date" id="date">
+    <label for="event_date">Filter by date:</label>
+   <input type="date" name="event_date" id="event_date">
 
     <input type="submit" value="Filter">
 </form>

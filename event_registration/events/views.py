@@ -4,6 +4,7 @@ from .forms import EventForm, CSVUploadForm
 from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+
 from .services import parse_csv
 
 
