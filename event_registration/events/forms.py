@@ -13,6 +13,12 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['name', 'date_time', 'location', 'description', 'max_participants', 'image']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Event Name'}),
+            'location': forms.TextInput(attrs={'placeholder': 'Location'}),
+            'description': forms.Textarea(attrs={'placeholder': 'Event Description'}),
+            'max_participants': forms.NumberInput(attrs={'placeholder': 'Maximum Participants'}),
+        }
 
     def clean_date_time(self):
         date_time = self.cleaned_data.get('date_time')
