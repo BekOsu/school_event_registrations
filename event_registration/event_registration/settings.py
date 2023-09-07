@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+INTERNAL_IPS = ['127.0.0.1', ]
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +41,7 @@ INSTALLED_APPS = [
     'participants',
     'CRM',
 
+    'debug_toolbar',
     'widget_tweaks',
 
 ]
@@ -52,6 +54,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+
 ]
 
 ROOT_URLCONF = 'event_registration.urls'
@@ -81,6 +85,17 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'db.sqlite3',
+    }
+}
+
+# cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://0.0.0.0:6379/",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
     }
 }
 
@@ -134,3 +149,10 @@ LOGOUT_REDIRECT_URL = "/accounts/login/"
 
 HANDLER403 = 'CRM.views.CustomPermissionDeniedView'
 
+# celery
+# RabbitMQ
+# CELERY_BROKER_URL = 'pyamqp://guest:guest@localhost:5672//'
+CELERY_BROKER_URL = 'pyamqp://0.0.0.0:5672'
+
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60

@@ -6,6 +6,8 @@ from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from .services import parse_csv
 
@@ -82,6 +84,7 @@ class EventDetailView(DetailView):
         return context
 
 
+@method_decorator(cache_page(60 * 15), name='dispatch')  # Cache for 15 minutes
 class EventListView(ListView):
     model = Event
     template_name = 'events/event_list.html'
