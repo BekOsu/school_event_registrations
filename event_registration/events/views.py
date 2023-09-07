@@ -4,6 +4,8 @@ from .forms import EventForm, CSVUploadForm
 from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from datetime import datetime
+from django.utils.timezone import make_aware
 
 from .services import parse_csv
 
@@ -90,6 +92,7 @@ class EventListView(ListView):
             queryset = queryset.filter(event_type=event_type)
 
         if event_date:
-            queryset = queryset.filter(date_time__date=event_date)
+            aware_date = make_aware(datetime.strptime(event_date, '%Y-%m-%d'))
+            queryset = queryset.filter(date_time__date=aware_date)
 
         return queryset
