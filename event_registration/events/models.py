@@ -42,6 +42,7 @@ class Event(models.Model):
 
 
 class Participant(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     email = models.EmailField(unique=True)
@@ -58,6 +59,8 @@ class EventRegistration(models.Model):
     registration_date = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
+        if EventRegistration.objects.filter(event=self.event, participant=self.participant).exists():
+            raise ValidationError("User is already registered for this event")
         if self.event.remaining_participants <= 0:
             raise ValidationError("The event has reached its maximum number of participants")
         super(EventRegistration, self).save(*args, **kwargs)
