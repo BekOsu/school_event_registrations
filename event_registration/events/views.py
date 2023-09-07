@@ -6,13 +6,8 @@ from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
 
 from .services import parse_csv
-
-
-# def custom_permission_denied_view(request, exception=None):
-#     return render(request, '403.html', {}, status=403)
 
 
 class EventFormMixin:
