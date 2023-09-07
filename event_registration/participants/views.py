@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView
+from events.fillters import filter_by_type, filter_by_specific_date, filter_by_date_range
 from events.models import Participant, Event, EventRegistration
 from .forms import ParticipantForm
 from django.urls import reverse_lazy
@@ -78,10 +79,24 @@ class UserEventListView(LoginRequiredMixin, ListView):
         user = self.request.user
         try:
             self.participant = Participant.objects.get(user=user)
-            return Event.objects.filter(participants=self.participant).order_by('date_time')
+            queryset = Event.objects.filter(participants=self.participant)
         except ObjectDoesNotExist:
             self.participant = None
-            return Event.objects.none()  # Returns an empty queryset
+            queryset = Event.objects.none()
+
+        event_type = self.request.GET.get('event_type')
+        event_date = self.request.GET.get('event_date')
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
+
+        queryset = filter_by_type(queryset, event_type)
+
+        if event_date:
+            queryset = filter_by_specific_date(queryset, event_date)
+        else:
+            queryset = filter_by_date_range(queryset, start_date, end_date)
+
+        return queryset.order_by('date_time')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -93,4 +108,3 @@ class UserEventListView(LoginRequiredMixin, ListView):
             context['participant'] = None
         context['user'] = user
         return context
-
