@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from .forms import EventForm, CSVUploadForm
 from .models import Event
 from django.contrib import messages
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .services import parse_csv
 
 
@@ -30,7 +30,7 @@ class CSVFormMixin:
         messages.success(self.request, 'Events imported successfully.')
 
 
-class CombinedEventCreateAndCSVImportView(EventFormMixin, CSVFormMixin, CreateView, FormView):
+class CombinedEventCreateAndCSVImportView(LoginRequiredMixin, EventFormMixin, CSVFormMixin, CreateView, FormView):
     form_class = EventForm
     second_form_class = CSVUploadForm
     template_name = 'events/create_or_import_events.html'
