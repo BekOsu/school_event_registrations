@@ -87,12 +87,27 @@ class EventListView(ListView):
         queryset = Event.objects.all().order_by('date_time')
         event_type = self.request.GET.get('event_type')
         event_date = self.request.GET.get('event_date')
+        start_date = self.request.GET.get('start_date')
+        end_date = self.request.GET.get('end_date')
 
         if event_type:
             queryset = queryset.filter(event_type=event_type)
 
         if event_date:
-            aware_date = make_aware(datetime.strptime(event_date, '%Y-%m-%d'))
-            queryset = queryset.filter(date_time__date=aware_date)
+            aware_event_date = make_aware(datetime.strptime(event_date, '%Y-%m-%d'))
+            queryset = queryset.filter(date_time__date=aware_event_date)
+
+        elif start_date and end_date:
+            aware_start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            aware_end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+            queryset = queryset.filter(date_time__gte=aware_start_date, date_time__lte=aware_end_date)
+
+        elif start_date:
+            aware_start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+            queryset = queryset.filter(date_time__gte=aware_start_date)
+
+        elif end_date:
+            aware_end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
+            queryset = queryset.filter(date_time__lte=aware_end_date)
 
         return queryset
