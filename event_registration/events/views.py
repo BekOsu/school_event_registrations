@@ -5,8 +5,14 @@ from .forms import EventForm, CSVUploadForm
 from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render
 
 from .services import parse_csv
+
+
+# def custom_permission_denied_view(request, exception=None):
+#     return render(request, '403.html', {}, status=403)
 
 
 class EventFormMixin:
@@ -36,6 +42,11 @@ class CombinedEventCreateAndCSVImportView(LoginRequiredMixin, EventFormMixin, CS
     form_class = EventForm
     second_form_class = CSVUploadForm
     template_name = 'events/create_or_import_events.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.groups.filter(name='EventAdmins').exists():
+            raise PermissionDenied("You do not have permission to create or import events.")
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

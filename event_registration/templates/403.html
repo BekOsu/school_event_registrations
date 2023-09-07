@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>403 Forbidden</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="alert alert-danger" role="alert">
+          <h4 class="alert-heading">403 Forbidden</h4>
+          <p>You do not have permission to access this page.</p>
+          <hr>
+          <a href="{% url 'events_list' %}" class="btn btn-primary">Go to Home</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
