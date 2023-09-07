@@ -6,8 +6,6 @@ from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 
 
 class ParticipantCreateView(LoginRequiredMixin, CreateView):
@@ -26,25 +24,28 @@ class ParticipantCreateView(LoginRequiredMixin, CreateView):
         event_id = self.kwargs.get('event_id')
         event = get_object_or_404(Event, id=event_id)
 
-        # Check if a participant object exists for this user or create one
-        participant, created = Participant.objects.get_or_create(user=self.request.user)
+        try:
+            participant = Participant.objects.get(user=self.request.user)
+        except Participant.DoesNotExist:
+            participant = None
 
-        if created:
-            # Populate the participant object with form data
-            participant.first_name = form.cleaned_data['first_name']
-            participant.last_name = form.cleaned_data['last_name']
-            participant.email = form.cleaned_data['email']
-            participant.phone_number = form.cleaned_data['phone_number']
-            participant.profile_picture = form.cleaned_data['profile_picture']
-            try:
-                participant.save()
-            except IntegrityError:
+        if participant is None:
+            new_email = form.cleaned_data['email']
+            if Participant.objects.filter(email=new_email).exists():
                 messages.error(self.request, "This email is already in use.")
                 return self.form_invalid(form)
 
-            messages.success(self.request, f"You have been registered for the event: {event.name}.")
+            participant = Participant(user=self.request.user)
 
-        # Check if user already registered
+        # Populate or update the Participant record
+        participant.first_name = form.cleaned_data['first_name']
+        participant.last_name = form.cleaned_data['last_name']
+        participant.email = form.cleaned_data['email']
+        participant.phone_number = form.cleaned_data['phone_number']
+        participant.profile_picture = form.cleaned_data['profile_picture']
+        participant.save()
+
+        # Check if the user has already registered for this event
         if EventRegistration.objects.filter(event=event, participant=participant).exists():
             messages.error(self.request, "You have already registered for this event.")
             return self.form_invalid(form)
@@ -56,6 +57,9 @@ class ParticipantCreateView(LoginRequiredMixin, CreateView):
 
         # Create the Event Registration
         EventRegistration.objects.create(event=event, participant=participant)
+
+        # Success message
+        messages.success(self.request, f"You have been registered for the event: {event.name}.")
 
         return HttpResponseRedirect(self.get_success_url())
 
