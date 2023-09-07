@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>My Profile</h1>
+
+{% if participant %}
+<h2>Welcome, {{ participant.first_name }} {{ participant.last_name }}</h2>
+{% else %}
+<h2>Welcome, {{ user.username }} </h2>
+{% endif %}
+
+<div class="row">
+    <div class="col-sm-3">
+        {% if participant and participant.profile_picture %}
+        <img alt="{{ participant.first_name }} {{ participant.last_name }}" class="img-fluid"
+             src="{{ participant.profile_picture.url }}" width="200">
+        {% elif user and user.profile_picture %}
+        <img alt="{{ user.username }}" class="img-fluid"
+             src="{{ user.profile_picture.url }}" width="200">
+        {% else %}
+        <img alt="{{ user.username }}" class="img-fluid"
+             src="/images/default_user.png" width="200">
+        {% endif %}
+    </div>
+    <div class="col-sm-9">
+        {% if participant %}
+        <h3>{{ participant.first_name }} {{ participant.last_name }}</h3>
+        <p>Email: {{ participant.email }}</p>
+        <p>Phone: {{ participant.phone_number }}</p>
+        {% else %}
+        <h3>{{ user.username }}</h3>
+        {% endif %}
+    </div>
+</div>
+
+<h1>My Registered Events</h1>
+
+{% if events %}
+<table class="table table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Event Name</th>
+        <th>Event Type</th>
+        <th>Date</th>
+        <th>Location</th>
+        <th>Description</th>
+        <th>Max Participants</th>
+        <th>Remaining Participants</th>
+        <th>Image</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for event in events %}
+    <tr>
+        <td><a href="{% url 'event_detail' event.id %}">{{ event.name }}</a></td>
+        <td>{{ event.event_type }}</td>
+        <td>{{ event.date_time|date:"SHORT_DATE_FORMAT" }}</td>
+        <td>{{ event.location }}</td>
+        <td>{{ event.description }}</td>
+        <td>{{ event.max_participants }}</td>
+        <td>{{ event.remaining_participants }}</td>
+        <td>
+            {% if event.image %}
+            <a href="{% url 'event_detail' event.id %}">
+                <img alt="{{ event.name }}" class="img-fluid" src="{{ event.image.url }}" width="100"></a>
+            {% else %}
+            No image
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+you don't registered for any event yet.
+<p>{{ message }}</p>
+{% endif %}
+
+<!-- Back to Events List Button -->
+<a class="btn btn-secondary" href="{% url 'events_list' %}">Back to Events List</a>
+
+{% endblock %}
