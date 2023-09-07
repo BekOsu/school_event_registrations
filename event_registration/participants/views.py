@@ -1,15 +1,14 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView
-from django.views import generic
-from django.utils import timezone
 from events.models import Participant, Event, EventRegistration
 from .forms import ParticipantForm
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-class ParticipantCreateView(CreateView):
+class ParticipantCreateView(LoginRequiredMixin, CreateView):
     model = Participant
     form_class = ParticipantForm
     template_name = 'participants/register_participant.html'
@@ -25,6 +24,16 @@ class ParticipantCreateView(CreateView):
         event_id = self.kwargs.get('event_id')
         event = get_object_or_404(Event, id=event_id)
 
+        participant, created = Participant.objects.get_or_create(user=self.request.user)
+
+        if created:
+            messages.success(self.request, f"You have been registered for the event : {event.name}.")
+
+        # Check if user already registered
+        if EventRegistration.objects.filter(event=event, participant=participant).exists():
+            messages.error(self.request, "You have already registered for this event.")
+            return self.form_invalid(form)
+
         if event.remaining_participants <= 0:
             messages.error(self.request, "The event has reached its maximum number of participants.")
             return self.form_invalid(form)
@@ -35,24 +44,4 @@ class ParticipantCreateView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy('event_list')
-
-
-class EventListView(generic.ListView):
-    model = Event
-    context_object_name = 'events'
-    template_name = 'events/event_list.html'
-
-    def get_queryset(self):
-        filter_val = self.request.GET.get('filter', '')
-        if filter_val:
-            return Event.objects.filter(
-                # Implement your filtering logic here.
-                # For example, for filtering by date:
-                date_time__gte=timezone.now(),
-                date_time__date=filter_val,
-            ).order_by('date_time')
-        else:
-            return Event.objects.filter(
-                date_time__gte=timezone.now()
-            ).order_by('date_time')
+        return reverse_lazy('events_list')
