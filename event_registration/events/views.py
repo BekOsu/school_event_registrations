@@ -1,11 +1,10 @@
 from django.views.generic import CreateView, DetailView, ListView, FormView
 from django.urls import reverse_lazy
+from .fillters import filter_by_type, filter_by_specific_date, filter_by_date_range
 from .forms import EventForm, CSVUploadForm
 from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from datetime import datetime
-from django.utils.timezone import make_aware
 
 from .services import parse_csv
 
@@ -84,30 +83,22 @@ class EventListView(ListView):
     ordering = ['date_time']
 
     def get_queryset(self):
-        queryset = Event.objects.all().order_by('date_time')
+        queryset = super().get_queryset().order_by('date_time')
+
+        # Retrieve filtering parameters from GET request
         event_type = self.request.GET.get('event_type')
         event_date = self.request.GET.get('event_date')
         start_date = self.request.GET.get('start_date')
         end_date = self.request.GET.get('end_date')
 
-        if event_type:
-            queryset = queryset.filter(event_type=event_type)
+        # Apply type filter to queryset
+        queryset = filter_by_type(queryset, event_type)
 
+        # If a specific date is provided, filter by that date;
+        # otherwise, consider the date range
         if event_date:
-            aware_event_date = make_aware(datetime.strptime(event_date, '%Y-%m-%d'))
-            queryset = queryset.filter(date_time__date=aware_event_date)
-
-        elif start_date and end_date:
-            aware_start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
-            aware_end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
-            queryset = queryset.filter(date_time__gte=aware_start_date, date_time__lte=aware_end_date)
-
-        elif start_date:
-            aware_start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
-            queryset = queryset.filter(date_time__gte=aware_start_date)
-
-        elif end_date:
-            aware_end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d'))
-            queryset = queryset.filter(date_time__lte=aware_end_date)
+            queryset = filter_by_specific_date(queryset, event_date)
+        else:
+            queryset = filter_by_date_range(queryset, start_date, end_date)
 
         return queryset
