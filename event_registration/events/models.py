@@ -7,11 +7,20 @@ import datetime
 
 
 class Event(models.Model):
+
+    EVENT_TYPE_CHOICES = (
+        ('conference', 'Conference'),
+        ('seminar', 'Seminar'),
+        ('workshop', 'Workshop'),
+        ('webinar', 'Webinar'),
+    )
+
     name = models.CharField(max_length=200, unique=True)
     image = models.ImageField(upload_to='events/', default='default_event.png')
     date_time = models.DateTimeField()
     location = models.CharField(max_length=200)
     description = models.TextField(max_length=600)
+    event_type = models.CharField(max_length=30, choices=EVENT_TYPE_CHOICES, default='conference')
     max_participants = models.PositiveIntegerField(default=0)
     participants = models.ManyToManyField('Participant', through='EventRegistration', related_name='events')
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)

@@ -2,10 +2,29 @@
 {% block content %}
 <h1>Events</h1>
 
+<!-- Add a form for filtering -->
+<form method="get">
+    <label for="type">Filter by type:</label>
+    <select name="type" id="type">
+        <option value="">-- Select --</option>
+        <!-- Add your event types here -->
+        <option value="Conference">Conference</option>
+        <option value="Seminar">Seminar</option>
+        <option value="Workshop">Workshop</option>
+        <option value="Webinar">Webinar</option>
+    </select>
+
+    <label for="date">Filter by date:</label>
+    <input type="date" name="date" id="date">
+
+    <input type="submit" value="Filter">
+</form>
+
 <table class="table table-striped table-hover">
     <thead>
     <tr>
         <th>Name</th>
+        <th>Event Type</th>
         <th>Date</th>
         <th>Location</th>
         <th>Description</th>
@@ -19,11 +38,12 @@
     {% for event in events %}
     <tr>
         <td><a href="{% url 'event_detail' event.id %}">{{ event.name }}</a></td>
+        <td>{{ event.event_type }}</td>
         <td>{{ event.date_time|date:"SHORT_DATE_FORMAT" }}</td>
         <td>{{ event.location }}</td>
         <td>{{ event.description }}</td>
         <td>{{ event.max_participants }}</td>
-        <td>{{ event.remaining_participants }}</td>
+        <td>{{ event.remaining_participants }}</td> <!-- Use remaining_participants here -->
         <td>
             {% if event.image %}
             <a href="{% url 'event_detail' event.id %}">
@@ -42,7 +62,7 @@
     </tr>
     {% empty %}
     <tr>
-        <td colspan="8">No events to display.</td>
+        <td colspan="9">No events to display.</td>
     </tr>
     {% endfor %}
     </tbody>

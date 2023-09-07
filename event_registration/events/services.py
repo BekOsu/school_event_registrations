@@ -53,6 +53,7 @@ def parse_csv(csv_file, request):
         event.location = row['location']
         event.description = row['description']
         event.max_participants = int(row['max_participants'])
+        event.event_type = row['event_type']
 
         image_path = row.get('image_path', '').strip()
 

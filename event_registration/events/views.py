@@ -80,8 +80,21 @@ class EventListView(ListView):
     context_object_name = 'events'
     ordering = ['date_time']
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        for event in context['events']:
-            event.remaining = event.remaining_participants  # You can now access this in your template
-        return context
+    def get_queryset(self):
+        queryset = Event.objects.all().order_by('date_time')
+        event_type = self.request.GET.get('event_type')
+        event_date = self.request.GET.get('event_date')
+
+        if event_type:
+            queryset = queryset.filter(event_type=event_type)
+
+        if event_date:
+            queryset = queryset.filter(date_time__date=event_date)
+
+        return queryset
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     for event in context['events']:
+    #         event.remaining = event.remaining_participants  # You can now access this in your template
+    #     return context
