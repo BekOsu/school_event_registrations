@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.db import models, IntegrityError
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -67,9 +68,10 @@ class EventRegistration(models.Model):
     participant = models.ForeignKey(Participant, on_delete=models.CASCADE)
     registration_date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('event', 'participant')
+
     def save(self, *args, **kwargs):
-        if EventRegistration.objects.filter(event=self.event, participant=self.participant).exists():
-            raise ValidationError("User is already registered for this event")
         if self.event.remaining_participants <= 0:
             raise ValidationError("The event has reached its maximum number of participants")
         super(EventRegistration, self).save(*args, **kwargs)
