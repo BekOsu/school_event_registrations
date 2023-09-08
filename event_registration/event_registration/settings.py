@@ -151,8 +151,8 @@ HANDLER403 = 'CRM.views.CustomPermissionDeniedView'
 
 # celery
 # RabbitMQ
-# CELERY_BROKER_URL = 'pyamqp://guest:guest@localhost:5672//'
 CELERY_BROKER_URL = 'pyamqp://0.0.0.0:5672'
+CELERY_RESULT_BACKEND = 'rpc://'
 
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
