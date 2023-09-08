@@ -6,8 +6,8 @@ from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
+# from django.views.decorators.cache import cache_page
+# from django.utils.decorators import method_decorator
 
 from .services import parse_csv
 
