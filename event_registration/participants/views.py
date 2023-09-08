@@ -1,15 +1,18 @@
-from django.shortcuts import get_object_or_404
-from django.views.generic import ListView
-from django.views.generic.edit import CreateView
-from events.fillters import filter_by_type, filter_by_specific_date, filter_by_date_range
-from events.models import Participant, Event, EventRegistration
-from .forms import ParticipantForm
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse_lazy
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView
+
+from events.fillters import (filter_by_date_range, filter_by_specific_date,
+                             filter_by_type)
+from events.models import Event, EventRegistration, Participant
 from events.tasks import send_event_registration_email
+
+from .forms import ParticipantForm
 
 
 class ParticipantCreateView(LoginRequiredMixin, CreateView):

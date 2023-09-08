@@ -1,11 +1,13 @@
 import csv
-from django.contrib import messages
-from django.conf import settings
-from django.core.files import File
-from .models import Event
-from datetime import datetime
 import logging
 import os
+from datetime import datetime
+
+from django.conf import settings
+from django.contrib import messages
+from django.core.files import File
+
+from .models import Event
 
 logger = logging.getLogger(__name__)
 

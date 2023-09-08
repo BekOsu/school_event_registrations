@@ -1,15 +1,18 @@
-from django.views.generic import CreateView, DetailView, ListView, FormView
-from django.urls import reverse_lazy
-from .fillters import filter_by_type, filter_by_specific_date, filter_by_date_range
-from .forms import EventForm, CSVUploadForm
-from .models import Event
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, FormView, ListView
+
+from .fillters import (filter_by_date_range, filter_by_specific_date,
+                       filter_by_type)
+from .forms import CSVUploadForm, EventForm
+from .models import Event
+from .services import parse_csv
+
 # from django.views.decorators.cache import cache_page
 # from django.utils.decorators import method_decorator
 
-from .services import parse_csv
 
 
 class EventFormMixin:

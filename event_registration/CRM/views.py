@@ -1,8 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm
-from django.views.generic import CreateView
-from django.urls import reverse_lazy
-from django.views.generic import TemplateView
 from django.http import HttpResponseForbidden
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, TemplateView
 
 
 class SignUpView(CreateView):

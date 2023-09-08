@@ -1,9 +1,11 @@
-from django.test import TestCase
-from django.contrib.auth.models import User
-from django.urls import reverse
-from events.models import Event, EventRegistration, Participant
-from django.utils import timezone
 from datetime import timedelta
+
+from django.contrib.auth.models import User
+from django.test import TestCase
+from django.urls import reverse
+from django.utils import timezone
+
+from events.models import Event, EventRegistration, Participant
 
 
 class ParticipantTestCase(TestCase):
