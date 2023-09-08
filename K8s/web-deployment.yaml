@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: web
+        image: your-web-image # Replace with the image you built
+        ports:
+        - containerPort: 8000
+        volumeMounts:
+        - name: code-volume
+          mountPath: /code
+      volumes:
+      - name: code-volume
+        hostPath:
+          path: /path/on/host # Replace this with the path to your code on the host
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: LoadBalancer
