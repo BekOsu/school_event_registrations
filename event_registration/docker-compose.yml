@@ -10,3 +10,6 @@ services:
       - "8000:8000"
   redis:
     image: redis:6-alpine
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq_django
