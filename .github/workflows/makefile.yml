@@ -19,7 +19,7 @@ jobs:
     - uses: actions/checkout@v3
       
     - name: make build
-      run: /event_registration/make build
+      run: ls && pwd && /event_registration/make build
 
     - name: make run
       run: /event_registration/make run-d
