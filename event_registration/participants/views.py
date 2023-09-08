@@ -66,7 +66,6 @@ class ParticipantCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, f"You have been registered for the event: {event.name}.")
 
         send_event_registration_email.delay(self.request.user.id, event.name)
-        print('create user event registration')
 
         return HttpResponseRedirect(self.get_success_url())
 
