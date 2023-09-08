@@ -1,0 +1,63 @@
+
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+# To set up pre-commit for the first time, see: https://wiki.asml.com/wiki/confluence/display/SDT/Testing
+exclude: '^libs/|.*test_data/|.lunch_decision.js$|.pub$|.txt$|.csv$|.xml$'
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: check-added-large-files
+      - id: check-case-conflict
+      - id: check-json
+      - id: check-symlinks
+      - id: requirements-txt-fixer
+      - id: trailing-whitespace
+        exclude: test_postgres_polluter.py
+      - id: end-of-file-fixer
+      - id: debug-statements
+      - id: fix-encoding-pragma
+        args: ['--remove']
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: sort-simple-yaml
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
+    hooks:
+      - id: isort
+        args: ["--settings-file", "pyproject.toml"]
+  - repo: https://github.com/psf/black
+    rev: 22.6.0
+    hooks:
+      - id: black
+        args: [--safe, --quiet]
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.2.3
+    hooks:
+      - id: add-trailing-comma
+        args: [ --py36-plus ]
+  - repo: https://github.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+    - id: flake8
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint_regular
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+        - --rcfile=devtools/pylint.rc
+        files: lunch_decision|scripts|constants
+        exclude: conftest.py|test(_.*).py
+      - id: pylint
+        name: pylint_unittest
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+        - --rcfile=devtools/pylint_unittests.rc
+        files: (lunch_decision|scripts|constants)(/.*)+/tests/conftest.py|(src|scripts|constants)(/.*)+/tests
+
+
