@@ -50,3 +50,29 @@ class ParticipantTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertIn(self.event, list(response.context['events']))
+
+
+class UserEventListViewTestCase(TestCase):
+
+    def setUp(self):
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.event = Event.objects.create(name="Test Event", max_participants=5, date_time="2023-09-06 14:30:59")
+        self.participant = Participant.objects.create(user=self.user)
+        self.event.participants.add(self.participant)
+
+    def test_login_required(self):
+        response = self.client.get(reverse('user_events'))
+        self.assertEqual(response.status_code, 302)  # Redirect to login page
+
+    def test_query_set_for_participant(self):
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('user_events'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.event, response.context['events'])
+
+    def test_context_data(self):
+        self.client.login(username='testuser', password='12345')
+        response = self.client.get(reverse('user_events'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['user'], self.user)
+        self.assertEqual(response.context['participant'], self.participant)
