@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     'CRM',
     # packages
     'rest_framework',
-    'django.contrib.staticfiles',
     'drf_yasg',
     'debug_toolbar',
     'widget_tweaks',
