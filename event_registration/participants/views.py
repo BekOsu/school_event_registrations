@@ -9,6 +9,7 @@ from django.http import HttpResponseRedirect
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
+from events.tasks import send_event_registration_email
 
 
 class ParticipantCreateView(LoginRequiredMixin, CreateView):
@@ -63,6 +64,9 @@ class ParticipantCreateView(LoginRequiredMixin, CreateView):
 
         # Success message
         messages.success(self.request, f"You have been registered for the event: {event.name}.")
+
+        send_event_registration_email.delay(self.request.user.id, event.name)
+        print('create user event registration')
 
         return HttpResponseRedirect(self.get_success_url())
 
