@@ -10,9 +10,9 @@ from .forms import CSVUploadForm, EventForm
 from .models import Event
 from .services import parse_csv
 
+
 # from django.views.decorators.cache import cache_page
 # from django.utils.decorators import method_decorator
-
 
 
 class EventFormMixin:
