@@ -1,1 +1,0 @@
-# school_event_registrations
