@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'events',
     'participants',
     'CRM',
+    'api',
     # packages
     'rest_framework',
     'drf_yasg',
@@ -51,6 +52,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'rest_framework_simplejwt',
 
 ]
 
@@ -105,6 +107,12 @@ AUTHENTICATION_BACKENDS = [
 SITE_ID = 1
 
 # ACCOUNT_EMAIL_REQUIRED = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
 
 # cache
 CACHES = {
