@@ -40,6 +40,10 @@ Run docker-compose build      to build the Docker images.
 Run docker-compose up         to start the development server.
 
 ```
+## For the purpose of functionality testing, the following accounts have been created:
+  - **`superuser:`**              Username: admin                                            password: pass
+  - **`event creator user:`**     Username: event-admin                                      password:  pass123456
+
 
 ## Technology Stack & Features:
 * Django fresh build
