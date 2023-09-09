@@ -17,11 +17,10 @@ The Event Registration App is designed to streamline the registration process fo
 - Registration and authentication for users.
 - Event management capabilities for administrators.
 - Detailed event pages for users to explore.
-- Participant registration, including profile picture upload.
+- Participant registration, providing essential information like name, email, and phone number. Profile pictures are optional.
 - Employee management (create, list)
 - Event filtering and sorting functionality.
 - Bulk event importing functionality via CSV files.
-- Containerization (Docker)
 
 ![event-list](https://github.com/BekOsu/school_event_registrations/assets/95960598/d11cc6a2-2eec-4b55-87bb-caf0ba3b8ea5)
 
@@ -83,7 +82,7 @@ This project uses pre-commit hooks to ensure code quality and consistency. The f
 
 ## CI/CD:
 #### Two steps: Build with tests, then Deploy.
-#### I commented the part of pushing the images to DockerHub then uploading it to the cloud.
+#### This workflow is for demonstration and proposal purposes.
 ![pipline](https://github.com/BekOsu/school_event_registrations/assets/95960598/2bb5255e-bb9e-49da-ac5d-9f92d32f29fc)
 
 
