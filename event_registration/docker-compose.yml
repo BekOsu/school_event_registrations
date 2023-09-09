@@ -13,8 +13,18 @@ services:
       - .:/code
     ports:
       - "8000:8000"
+    depends_on:
+      - rabbitmq
+      - redis
   redis:
     image: redis:6-alpine
   rabbitmq:
     image: rabbitmq:3-management-alpine
     container_name: rabbitmq_django
+  celery:
+    build: .
+    command: celery -A event_registration worker -l info
+    volumes:
+      - .:/code
+    depends_on:
+      - rabbitmq
