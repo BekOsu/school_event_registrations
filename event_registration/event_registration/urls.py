@@ -27,7 +27,7 @@ urlpatterns = [
     path('', include('participants.urls')),
     path('', include('CRM.urls')),
     path('', RedirectView.as_view(url='events_list/')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('allauth.urls')),
     path('__debug__/', include(debug_toolbar.urls)),
 
     # Open API

@@ -47,6 +47,11 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'widget_tweaks',
 
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
 ]
 
 MIDDLEWARE = [
@@ -58,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "allauth.account.middleware.AccountMiddleware",
 
 ]
 
@@ -90,6 +96,15 @@ DATABASES = {
         'NAME': 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+# ACCOUNT_EMAIL_REQUIRED = True
 
 # cache
 CACHES = {
@@ -146,7 +161,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # user uploaded files (media) go h
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/user_events"
 
 LOGOUT_REDIRECT_URL = "/accounts/login/"
 
