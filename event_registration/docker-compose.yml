@@ -33,8 +33,6 @@ services:
 
     ports:
       - "8000:80"
-    links:
-      - web
     depends_on:
       - web
     volumes:
