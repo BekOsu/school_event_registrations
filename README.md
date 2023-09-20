@@ -22,6 +22,8 @@ The Event Registration App is designed to streamline the registration process fo
 - Event filtering and sorting functionality.
 - Bulk event importing functionality via CSV files.
 
+Is available at http://localhost:8001/
+
 ![event-list](https://github.com/BekOsu/school_event_registrations/assets/95960598/d11cc6a2-2eec-4b55-87bb-caf0ba3b8ea5)
 
 ## **Installation**
