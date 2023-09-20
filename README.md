@@ -18,7 +18,7 @@ The Event Registration App is designed to streamline the registration process fo
 - Event management capabilities for administrators.
 - Detailed event pages for users to explore.
 - Participant registration, providing essential information like name, email, and phone number. Profile pictures are optional.
-- Employee management (create, list)
+- Event management (create, list, Details)
 - Event filtering and sorting functionality.
 - Bulk event importing functionality via CSV files.
 
