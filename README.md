@@ -85,7 +85,7 @@ This project uses pre-commit hooks to ensure code quality and consistency. The f
 - **`add-trailing-comma`**
 
 ## CI/CD:
-#### Two steps: Build with tests, then Deploy.
+#### Three steps: Build & tests, then Deploy.
 #### This workflow is for demonstration and proposal purposes.
 ![pipline](https://github.com/BekOsu/school_event_registrations/assets/95960598/2bb5255e-bb9e-49da-ac5d-9f92d32f29fc)
 
